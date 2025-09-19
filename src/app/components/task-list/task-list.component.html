@@ -1,0 +1,56 @@
+<div>
+  <div
+    style="
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    "
+  >
+    <h2>Tasks</h2>
+    <app-task-form (created)="onCreated($event)"></app-task-form>
+  </div>
+  @for(t of tasks;track t.id){
+  <div class="task-card">
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+      "
+    >
+      <div>
+        <h3>
+          <a [routerLink]="['/task', t.id]">{{ t.title }}</a>
+        </h3>
+        <div class="small">{{ t.description }}</div>
+        <div class="small">
+          Deadline: {{ t.deadline | date : "dd:MM:yyyy" }}
+        </div>
+        <div class="small">
+          Status:
+          <span [ngStyle]="{ color: getStatusColor(t.status) }">
+            {{ t.status }}
+          </span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px">
+        <button class="btn btn-ghost" (click)="edit(t)">Edit</button>
+        <button class="btn btn-danger" (click)="deleteTask(t.id)">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+  <div id="calendar">
+    <h3>Calendar</h3>
+    <full-calendar
+      [options]="calendarOptions"
+      [events]="calendarEvents"
+    ></full-calendar>
+  </div>
+</div>
+
+<!-- (eventClick)="onEventClick($event)" -->

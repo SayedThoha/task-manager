@@ -1,0 +1,53 @@
+[
+  {
+    "id": "1",
+    "title": "Setup project repository",
+    "description": "Initialize Git repository, setup branch protection rules, and push base Angular app.",
+    "content": "<p>Steps done: Repo created on GitHub, main branch protected, Angular project pushed successfully.</p>",
+    "deadline": "2025-09-20T04:30:04.000Z",
+    "status": "Completed",
+    "comments": [
+      {
+        "id": "c2",
+        "author": "Bob",
+        "text": "Great job! Repo is clean and branch rules are working fine.",
+        "createdAt": "2025-09-16T14:30:00.000Z",
+        "replies": [
+          {
+            "id": "r1",
+            "author": "Sayed",
+            "text": "Thanks! I'll add CI/CD next.",
+            "createdAt": "2025-09-17T08:45:00.000Z"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "title": "Implement task API mock",
+    "description": "Create a mock using local JSON and HttpClient to simulate API calls.",
+    "content": "<p>Add endpoints: GET /tasks, GET /tasks/:id, POST /tasks</p>",
+    "deadline": "2025-09-25T04:30:00.000Z",
+    "status": "In Progress",
+    "comments": [
+      {
+        "id": "c1",
+        "author": "Alice",
+        "text": "Remember to add pagination later.",
+        "createdAt": "2025-08-01T10:00:00.000Z",
+        "replies": []
+      }
+    ]
+  },
+
+  {
+    "id": "3",
+    "title": "Design login page",
+    "description": "Create a responsive login page with validation and accessibility in mind.",
+    "content": "<p>Detailed notes: Use reactive forms. Add password visibility toggle. Validate email field.</p>",
+    "deadline": "2025-09-22T05:00:03.000Z",
+    "status": "Pending",
+    "comments": []
+  }
+]

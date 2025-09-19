@@ -1,0 +1,175 @@
+<div class="comment-section">
+  <form [formGroup]="commentForm" (ngSubmit)="addComment()">
+    <div>
+      <input placeholder="Your name" formControlName="name" />
+      <div>
+        <span
+          class="text-red-500 text-sm"
+          *ngIf="
+            commentForm.get('name')?.touched && commentForm.get('name')?.invalid
+          "
+        >
+          Name is required
+        </span>
+        <span
+          class="text-red-500 text-sm"
+          *ngIf="commentForm.get('name')?.errors?.['minlength']"
+        >
+          Name must be at least
+          {{commentForm.get('name')?.errors?.['minlength'].requiredLength}}
+          characters
+        </span>
+        <span
+          class="text-red-500 text-sm"
+          *ngIf="commentForm.get('name')?.errors?.['maxlength']"
+        >
+          Name cannot exceed
+          {{commentForm.get('name')?.errors?.['maxlength'].requiredLength}}
+          characters
+        </span>
+      </div>
+    </div>
+    <div>
+      <input placeholder="Comment" formControlName="text" />
+      <div>
+        <span
+          class="text-red-500 text-sm"
+          *ngIf="
+            commentForm.get('text')?.touched && commentForm.get('text')?.invalid
+          "
+        >
+          Comment cannot be empty
+        </span>
+        <span
+          class="text-red-500 text-sm"
+          *ngIf="commentForm.get('text')?.errors?.['minlength']"
+        >
+          Name must be at least
+          {{commentForm.get('text')?.errors?.['minlength'].requiredLength}}
+          characters
+        </span>
+        <span
+          class="text-red-500 text-sm"
+          *ngIf="commentForm.get('text')?.errors?.['maxlength']"
+        >
+          Name cannot exceed
+          {{commentForm.get('text')?.errors?.['maxlength'].requiredLength}}
+          characters
+        </span>
+      </div>
+    </div>
+
+    <button
+      class="btn btn-primary"
+      type="submit"
+      [disabled]="commentForm.invalid"
+    >
+      Add Comment
+    </button>
+  </form>
+
+  <div *ngIf="comments?.length" class="mt-4">
+    <div *ngFor="let c of comments" style="margin-top: 12px" class="comment">
+      <div>
+        <strong>{{ c.author }}</strong>
+        <span class="small text-gray-500">{{
+          c.createdAt | date : "short"
+        }}</span>
+      </div>
+      <div>{{ c.text }}</div>
+      <div style="margin-top: 6px">
+        <button class="btn btn-ghost" (click)="toggleReply(c.id)">Reply</button>
+      </div>
+
+      <div *ngIf="replyTo === c.id" style="margin-top: 6px">
+        <form [formGroup]="replyForms[c.id]" (ngSubmit)="addReply(c.id)">
+          <div>
+            <input placeholder="Your name" formControlName="name" />
+            <div>
+              <span
+                class="text-red-500 text-sm"
+                *ngIf="
+                  replyForms[c.id!].get('name')?.touched &&
+                  replyForms[c.id!].get('name')?.invalid
+                "
+              >
+                Name is required
+              </span>
+              <span
+                class="text-red-500 text-sm"
+                *ngIf="replyForms[c.id!].get('name')?.errors?.['minlength']"
+              >
+                Name must be at least
+                {{replyForms[c.id!].get('name')?.errors?.['minlength'].requiredLength}}
+                characters
+              </span>
+              <span
+                class="text-red-500 text-sm"
+                *ngIf="replyForms[c.id!].get('name')?.errors?.['maxlength']"
+              >
+                Name cannot exceed
+                {{replyForms[c.id!].get('name')?.errors?.['maxlength'].requiredLength}}
+                characters
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <input placeholder="Reply" formControlName="text" />
+            <div>
+              <span
+                class="text-red-500 text-sm"
+                *ngIf="
+                  replyForms[c.id!].get('text')?.touched &&
+                  replyForms[c.id!].get('text')?.invalid
+                "
+              >
+                Reply cannot be empty
+              </span>
+              <span
+                class="text-red-500 text-sm"
+                *ngIf="replyForms[c.id!].get('text')?.errors?.['minlength']"
+              >
+                text must be at least
+                {{replyForms[c.id!].get('text')?.errors?.['minlength'].requiredLength}}
+                characters
+              </span>
+              <span
+                class="text-red-500 text-sm"
+                *ngIf="replyForms[c.id!].get('text')?.errors?.['maxlength']"
+              >
+                text cannot exceed
+                {{replyForms[c.id!].get('text')?.errors?.['minlength'].requiredLength}}
+                characters
+              </span>
+            </div>
+          </div>
+
+          <button
+            class="btn btn-primary"
+            type="submit"
+            [disabled]="replyForms[c.id].invalid"
+          >
+            Send
+          </button>
+        </form>
+      </div>
+
+      <div *ngIf="c.replies?.length" class="replies">
+        <div
+          *ngFor="let r of c.replies"
+          class="comment"
+          style="margin-left: 12px; margin-top: 8px"
+        >
+          <div>
+            <strong>{{ r.author }}</strong>
+            <span class="small text-gray-500">{{
+              r.createdAt | date : "short"
+            }}</span>
+          </div>
+          <div>{{ r.text }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

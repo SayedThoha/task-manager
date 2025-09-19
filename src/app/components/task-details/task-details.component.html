@@ -1,0 +1,64 @@
+<div *ngIf="task">
+  <h2>{{ task.title }}</h2>
+  <div class="small">Deadline: {{ task.deadline }}</div>
+  <div class="small">Status: {{ task.status }}</div>
+
+  <h3>Description</h3>
+
+  <div [innerHTML]="task.content"></div>
+
+  <h3>Edit Content</h3>
+  <form [formGroup]="contentForm" (ngSubmit)="saveContent()">
+    <quill-editor
+      formControlName="content"
+      [modules]="{
+        toolbar: [['bold', 'italic', 'underline'], [{ list: 'bullet' }]]
+      }"
+    ></quill-editor>
+    <div
+      *ngIf="
+        contentForm.get('content')?.touched &&
+        contentForm.get('content')?.invalid
+      "
+    >
+      <span
+        class="text-red-500 text-sm"
+        *ngIf="contentForm.get('content')?.errors?.['required']"
+      >
+        Content is required
+      </span>
+      <span
+        class="text-red-500 text-sm"
+        *ngIf="contentForm.get('content')?.errors?.['minlength']"
+      >
+        Content must be at least
+        {{ contentForm.get('content')?.errors?.['minlength'].requiredLength }}
+        characters
+      </span>
+      <span
+        class="text-red-500 text-sm"
+        *ngIf="contentForm.get('content')?.errors?.['emptyContent']"
+      >
+        Content cannot be just blank spaces
+      </span>
+    </div>
+
+    <div style="margin-top: 8px">
+      <button
+        class="btn btn-primary"
+        type="submit"
+        [disabled]="contentForm.invalid"
+      >
+        Save
+      </button>
+    </div>
+  </form>
+
+  <h3>Comments</h3>
+  <app-comments
+    [comments]="task.comments"
+    (newComment)="onNewComment($event)"
+    (replyComment)="onReply($event)"
+  ></app-comments>
+</div>
+<div *ngIf="!task">No Tasks Available</div>

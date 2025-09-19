@@ -1,0 +1,70 @@
+<div style="display: flex; gap: 8px; align-items: center">
+  <button class="btn btn-primary" *ngIf="!open" (click)="toggle()">
+    Add Task
+  </button>
+
+  <div *ngIf="open" style="margin-left: 8px">
+    <form #taskForm="ngForm" (ngSubmit)="create(taskForm)">
+      <div style="display: flex; gap: 8px">
+        <!-- Title -->
+        <div>
+          <input
+            placeholder="Title"
+            name="title"
+            [(ngModel)]="title"
+            required
+            minlength="3"
+            #titleCtrl="ngModel"
+          />
+          <div
+            *ngIf="titleCtrl.touched && titleCtrl.invalid"
+            style="color: red; font-size: 12px"
+          >
+            <span *ngIf="titleCtrl.errors?.['required']"
+              >Title is required</span
+            >
+            <span *ngIf="titleCtrl.errors?.['minlength']"
+              >Title must be at least 3 characters</span
+            >
+          </div>
+        </div>
+
+        <!-- Deadline -->
+        <div>
+          <input
+            placeholder="Deadline"
+            type="date"
+            name="deadline"
+            [(ngModel)]="deadline"
+            required
+            #deadlineCtrl="ngModel"
+          />
+          <div
+            *ngIf="deadlineCtrl.touched && deadlineCtrl.invalid"
+            style="color: red; font-size: 12px"
+          >
+            <span *ngIf="deadlineCtrl.errors?.['required']"
+              >Deadline is required</span
+            >
+          </div>
+        </div>
+
+        <!-- Status -->
+        <select name="status" [(ngModel)]="status" required>
+          <option>Pending</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+        </select>
+
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="taskForm.invalid"
+        >
+          Create
+        </button>
+        <button *ngIf="open" (click)="toggle()">cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
