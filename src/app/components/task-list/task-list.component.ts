@@ -20,6 +20,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
   tasks: Task[] = [];
   calendarEvents: EventInput[] = [];
   taskSubscription!: Subscription;
+  
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     plugins: [dayGridPlugin, interactionPlugin],

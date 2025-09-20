@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { Task } from '../models/task.model';
 import { HttpClient } from '@angular/common/http';
-import { Comment } from '../models/comment.model';
+
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,6 @@ export class TaskService {
   constructor(private http: HttpClient) {}
 
   loadTasks(): Observable<Task[]> {
-    // load from assets
     return this.http
       .get<Task[]>('tasks.json')
       .pipe(tap((tasks) => this.tasks$.next(tasks)));
@@ -44,8 +43,4 @@ export class TaskService {
     const curr = this.tasks$.value.filter((t) => t.id !== id);
     this.tasks$.next(curr);
   }
-
-
-  
-  
 }
