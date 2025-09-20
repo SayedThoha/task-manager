@@ -61,30 +61,24 @@ Prevent blank spaces for content
 
 ## Project Structure
 
-public/
-
-├─ tasks.json
-
 src/
-
-├ ─ app/
+├─ app/
 │ ├─ components/
 │ │ ├─ task-list/
 │ │ ├─ task-details/
 │ │ ├─ task-form/
-│ │ ├─ comments/
-
+│ │ └─ comments/
 │ ├─ models/
 │ │ ├─ task.model.ts
-│ │ ├─ comment.model.ts
-
+│ │ └─ comment.model.ts
 │ ├─ services/
-│ │ ├─ task.service.ts
+│ │ └─ task.service.ts
 │ ├─ store/
-
-│ │ ├─ comments.store.ts
+│ │ └─ comments.store.ts
 │ ├─ app.routes.ts
 │ └─ app.component.ts
+public/
+└─ tasks.json
 
 ## Installation Instructions
 
