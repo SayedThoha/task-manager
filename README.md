@@ -19,7 +19,7 @@ A simple **Task Manager** built with **Angular 19**, featuring:
 - Edit task content and update status
 - Delete tasks
 - Navigate to task details page for editing
-- Edit content using Quill Editor
+- Edit content using **Quill Editor**
 
 
 ### Comments
@@ -36,6 +36,16 @@ A simple **Task Manager** built with **Angular 19**, featuring:
 
 ---
 
+## Forms and Validation
+
+Task form use template driven form
+Comment and Reply Form use reactive Form 
+Validation rules:
+Required fields
+Minimum/maximum length
+
+Prevent blank spaces for content
+
 ## Tech Stack
 
 - Angular 19 (Standalone Components)
@@ -47,23 +57,31 @@ A simple **Task Manager** built with **Angular 19**, featuring:
 
 ---
 
+
+
 ## Project Structure
 
 public/
+
 ├─ tasks.json
+
 src/
-├─ app/
+
+├ ─ app/
 │ ├─ components/
 │ │ ├─ task-list/
 │ │ ├─ task-details/
 │ │ ├─ task-form/
 │ │ ├─ comments/
+
 │ ├─ models/
 │ │ ├─ task.model.ts
 │ │ ├─ comment.model.ts
+
 │ ├─ services/
 │ │ ├─ task.service.ts
 │ ├─ store/
+
 │ │ ├─ comments.store.ts
 │ ├─ app.routes.ts
 │ └─ app.component.ts
