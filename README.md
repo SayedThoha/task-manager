@@ -8,8 +8,13 @@ A simple **Task Manager** built with **Angular 19**, featuring:
 - Comments with nested replies using **MobX store**
 - Deadline calendar using **FullCalendar**
 
-
 ---
+
+## Hosted / Live Demo
+
+The **Task Manager Angular App** is hosted and accessible online:
+
+[🌐 View Live App on Vercel](https://task-manager-puce-tau.vercel.app/)
 
 ## Features
 
