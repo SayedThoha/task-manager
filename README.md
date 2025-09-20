@@ -57,29 +57,6 @@ Prevent blank spaces for content
 
 ---
 
-
-
-## Project Structure
-
-src/
-├─ app/
-│ ├─ components/
-│ │ ├─ task-list/
-│ │ ├─ task-details/
-│ │ ├─ task-form/
-│ │ └─ comments/
-│ ├─ models/
-│ │ ├─ task.model.ts
-│ │ └─ comment.model.ts
-│ ├─ services/
-│ │ └─ task.service.ts
-│ ├─ store/
-│ │ └─ comments.store.ts
-│ ├─ app.routes.ts
-│ └─ app.component.ts
-public/
-└─ tasks.json
-
 ## Installation Instructions
 
 To set up the project locally, follow these steps:
