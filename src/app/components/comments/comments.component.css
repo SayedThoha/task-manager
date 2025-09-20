@@ -1,6 +1,4 @@
-/* comments.component.css */
 
-/* Container */
 .comment-section {
   padding: 16px;
   background-color: #fefefe;
@@ -8,7 +6,7 @@
   border-radius: 6px;
 }
 
-/* Input fields */
+
 .comment-section input {
   width: 50%;
   padding: 8px 10px;
@@ -19,7 +17,7 @@
   box-sizing: border-box;
 }
 
-/* Buttons */
+
 .comment-section .btn {
   padding: 6px 12px;
   border-radius: 4px;
@@ -39,7 +37,7 @@
   border: 1px solid #ccc;
 }
 
-/* Error messages */
+
 .comment-section .text-red-500 {
   display: block;
   color: red;
@@ -47,14 +45,14 @@
   margin-top: 2px;
 }
 
-/* Individual comment container */
+
 .comment {
   padding: 8px 0;
   border-bottom: 1px solid #e5e7eb;
   margin-bottom: 8px;
 }
 
-/* Author and timestamp */
+
 .comment strong {
   font-weight: 600;
 }
@@ -65,7 +63,6 @@
   margin-left: 8px;
 }
 
-/* Reply button */
 .comment button {
   margin-top: 6px;
 }
@@ -76,20 +73,19 @@
   padding-left: 12px;
 }
 
-/* Replies container */
+
 .comment .replies {
   margin-left: 12px;
   margin-top: 8px;
 }
 
-/* Reply comment styling */
+
 .comment .replies .comment {
   border-bottom: none;
   padding: 4px 0;
   font-size: 14px;
 }
 
-/* Margin helpers */
 .mt-2 {
   margin-top: 8px;
 }

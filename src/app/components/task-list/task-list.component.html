@@ -34,6 +34,9 @@
             {{ t.status }}
           </span>
         </div>
+        <div class="small">
+          Deadline: {{ t.deadline | date : "dd:MM:yyyy" }}
+        </div>
       </div>
       <div style="display: flex; gap: 8px">
         <button class="btn btn-ghost" (click)="edit(t)">Edit</button>
@@ -53,4 +56,4 @@
   </div>
 </div>
 
-<!-- (eventClick)="onEventClick($event)" -->
+

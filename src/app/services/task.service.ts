@@ -45,34 +45,7 @@ export class TaskService {
     this.tasks$.next(curr);
   }
 
-  addComment(taskId: string, comment: Comment, parentId?: string) {
-    const tasks = this.tasks$.value.map((t) => {
-      if (t.id !== taskId) return t;
-      const clone = {
-        ...t,
-        comments: t.comments ? JSON.parse(JSON.stringify(t.comments)) : [],
-      };
-      if (!parentId) {
-        clone.comments!.push(comment);
-      } else {
-        // find parent recursively
-        const addReply = (list: Comment[] = []) => {
-          for (const c of list) {
-            if (c.id === parentId) {
-              c.replies = c.replies || [];
-              c.replies.push(comment);
-              return true;
-            }
-            if (c.replies && addReply(c.replies)) return true;
-          }
-          return false;
-        };
-        addReply(clone.comments!);
-      }
-      return clone;
-    });
-    this.tasks$.next(tasks);
-  }
 
+  
   
 }

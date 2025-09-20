@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Task } from '../../models/task.model';
 import { Router, RouterModule } from '@angular/router';
 import { TaskService } from '../../services/task.service';
@@ -8,6 +8,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, EventClickArg, EventInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-task-list',
@@ -15,19 +16,18 @@ import interactionPlugin from '@fullcalendar/interaction';
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css',
 })
-export class TaskListComponent implements OnInit {
+export class TaskListComponent implements OnInit, OnDestroy {
   tasks: Task[] = [];
   calendarEvents: EventInput[] = [];
-
+  taskSubscription!: Subscription;
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     plugins: [dayGridPlugin, interactionPlugin],
     events: [],
     displayEventTime: false,
-    height: 600,
+    height: 500,
     eventClick: (info: EventClickArg) => this.onEventClick(info),
   };
-
 
   constructor(private taskService: TaskService, private router: Router) {}
 
@@ -36,14 +36,13 @@ export class TaskListComponent implements OnInit {
   }
 
   getAllTask() {
-    this.taskService.getAll().subscribe((list) => {
+    this.taskSubscription = this.taskService.getAll().subscribe((list) => {
       this.tasks = list;
       this.calendarEvents = this.tasks.map((t) => ({
         title: t.title,
         start: t.deadline,
         id: t.id,
         color: this.getStatusColor(t.status),
-        
       }));
 
       this.calendarOptions = {
@@ -55,20 +54,10 @@ export class TaskListComponent implements OnInit {
 
   onCreated(task: Task) {
     this.taskService.addTask(task);
-    // this.calendarEvents.push({
-    //   title: task.title,
-    //   start: task.deadline,
-    //   id: task.id,
-    // });
-    // this.calendarOptions = {
-    //   ...this.calendarOptions,
-    //   events: this.calendarEvents,
-    // };
+
   }
 
   edit(t: Task) {
-    // emit or open simple prompt for demo: we'll open the details page for edit
-    // window.location.href = `/task/${t.id}`;
     const id = t.id;
     this.router.navigate(['/task', id]);
   }
@@ -87,20 +76,24 @@ export class TaskListComponent implements OnInit {
 
   onEventClick(info: EventClickArg) {
     const id = info.event.id;
-    // window.location.href = `/task/${id}`;
+  
     this.router.navigate(['/task', id]);
   }
 
   getStatusColor(status: string): string {
     switch (status) {
       case 'Pending':
-        return '#f87171'; // red-400
+        return '#f87171'; 
       case 'In Progress':
-        return '#60a5fa'; // blue-400
+        return '#60a5fa'; 
       case 'Completed':
-        return '#34d399'; // green-400
+        return '#34d399'; 
       default:
-        return '#d1d5db'; // gray-300
+        return '#d1d5db'; 
     }
+  }
+
+  ngOnDestroy(): void {
+    this.taskSubscription.unsubscribe();
   }
 }

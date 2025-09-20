@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Comment, CommentPayload } from '../../models/comment.model';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import {
   FormBuilder,
   FormGroup,
@@ -8,6 +8,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { CommentsStore } from '../../store/comments.store';
 
 @Component({
   selector: 'app-comments',
@@ -17,22 +18,22 @@ import {
 })
 export class CommentsComponent implements OnInit {
   @Input() comments?: Comment[];
-  @Output() newComment: EventEmitter<Comment> = new EventEmitter<Comment>();
-  @Output() replyComment: EventEmitter<CommentPayload> =
-    new EventEmitter<CommentPayload>();
 
-  name = '';
-  text = '';
-
-  replyName = '';
-  replyText = '';
 
   commentForm!: FormGroup;
   replyForms: { [key: string]: FormGroup } = {};
   replyTo!: string | null;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private commentStore: CommentsStore) {}
   ngOnInit(): void {
+    this.initialiseForms();
+  }
+
+    get showComment() {
+    return this.commentStore.comments;
+  }
+
+  initialiseForms() {
     this.commentForm = this.fb.group({
       name: [
         '',
@@ -58,7 +59,7 @@ export class CommentsComponent implements OnInit {
       this.commentForm.markAllAsTouched();
       return;
     }
-    // if (!this.text) return alert('write comment');
+    
     const { name, text } = this.commentForm.value;
     const comment = {
       id: crypto.randomUUID(),
@@ -67,10 +68,12 @@ export class CommentsComponent implements OnInit {
       createdAt: new Date().toISOString(),
     };
 
-    this.newComment.emit(comment);
+    
+    this.commentStore.addComment(comment);
     this.commentForm.reset();
-    // this.commentForm.reset({ name: 'Guest', text: '' });
+    
   }
+
 
   toggleReply(id: string) {
     this.replyTo = this.replyTo === id ? null : id;
@@ -96,6 +99,7 @@ export class CommentsComponent implements OnInit {
     }
   }
 
+
   addReply(parentId: string) {
     const form = this.replyForms[parentId];
     if (!form || form.invalid) {
@@ -112,8 +116,8 @@ export class CommentsComponent implements OnInit {
       createdAt: new Date().toISOString(),
       replies: [],
     };
-    const payload: CommentPayload = { ...reply, parentId };
-    this.replyComment.emit(payload);
+  
+    this.commentStore.addReply(parentId, reply);
     form.reset();
     this.replyTo = null;
   }

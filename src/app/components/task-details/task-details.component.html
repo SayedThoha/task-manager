@@ -1,4 +1,6 @@
-<div *ngIf="task">
+@if(task){
+<div>
+  <button class="btn-back" (click)="goBack()">← Back</button>
   <h2>{{ task.title }}</h2>
   <div class="small">Deadline: {{ task.deadline }}</div>
   <div class="small">Status: {{ task.status }}</div>
@@ -42,7 +44,12 @@
         Content cannot be just blank spaces
       </span>
     </div>
-
+    <h3>Status</h3>
+    <select formControlName="status">
+      <option value="Pending">Pending</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Completed">Completed</option>
+    </select>
     <div style="margin-top: 8px">
       <button
         class="btn btn-primary"
@@ -55,10 +62,8 @@
   </form>
 
   <h3>Comments</h3>
-  <app-comments
-    [comments]="task.comments"
-    (newComment)="onNewComment($event)"
-    (replyComment)="onReply($event)"
-  ></app-comments>
+  <app-comments [comments]="task.comments"></app-comments>
 </div>
-<div *ngIf="!task">No Tasks Available</div>
+}@else{
+<div>No Tasks Available</div>
+}

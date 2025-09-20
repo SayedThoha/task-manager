@@ -68,8 +68,8 @@
     </button>
   </form>
 
-  <div *ngIf="comments?.length" class="mt-4">
-    <div *ngFor="let c of comments" style="margin-top: 12px" class="comment">
+  <div class="mt-4">
+    <div *ngFor="let c of showComment" style="margin-top: 12px" class="comment">
       <div>
         <strong>{{ c.author }}</strong>
         <span class="small text-gray-500">{{

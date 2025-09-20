@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Task, TaskStatus } from '../../models/task.model';
 import { CommonModule } from '@angular/common';
@@ -8,12 +8,20 @@ import { CommonModule } from '@angular/common';
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.css',
 })
-export class TaskFormComponent {
+export class TaskFormComponent implements OnInit {
   @Output() created: EventEmitter<Task> = new EventEmitter<Task>();
+
   open = false;
   title = '';
   deadline = '';
+  description = '';
+  minDate = '';
   status: TaskStatus = 'Pending';
+
+  ngOnInit(): void {
+    const today = new Date();
+    this.minDate = today.toISOString().split('T')[0];
+  }
 
   toggle() {
     this.open = !this.open;
@@ -27,7 +35,7 @@ export class TaskFormComponent {
     const task: Task = {
       id: `${Date.now()}`,
       title: this.title,
-      description: this.title,
+      description: this.description,
       content: `<p>${this.title}</p>`,
       deadline: this.deadline,
       status: this.status,
@@ -38,6 +46,4 @@ export class TaskFormComponent {
     this.deadline = '';
     this.open = false;
   }
-
-  
 }

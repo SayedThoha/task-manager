@@ -6,7 +6,6 @@
   <div *ngIf="open" style="margin-left: 8px">
     <form #taskForm="ngForm" (ngSubmit)="create(taskForm)">
       <div style="display: flex; gap: 8px">
-        <!-- Title -->
         <div>
           <input
             placeholder="Title"
@@ -14,6 +13,7 @@
             [(ngModel)]="title"
             required
             minlength="3"
+            maxlength="30"
             #titleCtrl="ngModel"
           />
           <div
@@ -29,13 +29,36 @@
           </div>
         </div>
 
-        <!-- Deadline -->
+        <div>
+          <input
+            placeholder="Description"
+            name="description"
+            [(ngModel)]="description"
+            required
+            minlength="3"
+            maxlength="30"
+            #desCtrl="ngModel"
+          />
+          <div
+            *ngIf="desCtrl.touched && desCtrl.invalid"
+            style="color: red; font-size: 12px"
+          >
+            <span *ngIf="desCtrl.errors?.['required']"
+              >Description is required</span
+            >
+            <span *ngIf="desCtrl.errors?.['minlength']"
+              >Title must be at least 3 characters</span
+            >
+          </div>
+        </div>
+
         <div>
           <input
             placeholder="Deadline"
             type="date"
             name="deadline"
             [(ngModel)]="deadline"
+            [min]="minDate"
             required
             #deadlineCtrl="ngModel"
           />
@@ -49,7 +72,6 @@
           </div>
         </div>
 
-        <!-- Status -->
         <select name="status" [(ngModel)]="status" required>
           <option>Pending</option>
           <option>In Progress</option>

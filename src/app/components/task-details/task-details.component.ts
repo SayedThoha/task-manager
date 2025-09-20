@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -8,11 +8,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { Task } from '../../models/task.model';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TaskService } from '../../services/task.service';
 import { QuillModule } from 'ngx-quill';
 import { CommentsComponent } from '../comments/comments.component';
 import { Comment, CommentPayload } from '../../models/comment.model';
+import { CommentsStore } from '../../store/comments.store';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-task-details',
   imports: [
@@ -26,25 +28,29 @@ import { Comment, CommentPayload } from '../../models/comment.model';
   templateUrl: './task-details.component.html',
   styleUrl: './task-details.component.css',
 })
-export class TaskDetailsComponent implements OnInit {
+export class TaskDetailsComponent implements OnInit, OnDestroy {
   task?: Task;
   editableContent = '';
   contentForm!: FormGroup;
+  taskSubscription!: Subscription;
   constructor(
     private route: ActivatedRoute,
     private taskService: TaskService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private commentStore: CommentsStore,
+    private router: Router
   ) {}
 
   ngOnInit() {
-    this.getTask();
+    this.initialiseForms();
   }
 
-  getTask() {
+  initialiseForms() {
     const id = this.route.snapshot.paramMap.get('id')!;
-    this.taskService.getById(id).subscribe((t) => {
+    this.taskSubscription = this.taskService.getById(id).subscribe((t) => {
       this.task = t as Task;
-      // this.editableContent = this.task?.content || '';
+
+      this.commentStore.setComments(this.task.comments || []);
       this.contentForm = this.fb.group({
         content: [
           this.task?.content || '',
@@ -54,9 +60,11 @@ export class TaskDetailsComponent implements OnInit {
             this.nonEmptyValidator,
           ],
         ],
+        status: [this.task?.status || 'Pending', Validators.required],
       });
     });
   }
+
   nonEmptyValidator(control: any) {
     const value = (control.value || '').replace(/<(.|\n)*?>/g, '').trim();
     return value ? null : { emptyContent: true };
@@ -68,22 +76,15 @@ export class TaskDetailsComponent implements OnInit {
       return;
     }
     if (!this.task) return;
-    const copy = { ...this.task, content: this.contentForm.value.content };
+    const copy = {
+      ...this.task,
+      content: this.contentForm.value.content,
+      status: this.contentForm.value.status,
+    };
     this.taskService.updateTask(copy);
     alert('Saved');
   }
 
-  // cancelEdit() {
-  //   if (!this.task) return;
-
-  //   // Reset form back to original task content
-  //   this.contentForm.reset({
-  //     content: this.task.content,
-  //   });
-
-  //   // If you’re showing/hiding editor, close it here
-  //   // this.open = false;
-  // }
   onNewComment(payload: Comment) {
     if (!this.task) return;
     const comment = {
@@ -93,18 +94,28 @@ export class TaskDetailsComponent implements OnInit {
       createdAt: new Date().toISOString(),
       replies: [],
     };
-    this.taskService.addComment(this.task.id, comment);
+
+    this.commentStore.addComment(comment);
   }
 
   onReply(payload: CommentPayload) {
-    if (!this.task) return;
+    if (!this.task || !payload.parentId) return;
     const comment = {
       id: crypto.randomUUID(),
+      parentId: payload.parentId,
       author: payload.author || 'Guest',
       text: payload.text,
       createdAt: new Date().toISOString(),
       replies: [],
     };
-    this.taskService.addComment(this.task.id, comment, payload.parentId);
+    
+    this.commentStore.addReply(payload.parentId, comment);
+  }
+
+  goBack() {
+    this.router.navigate(['/']);
+  }
+  ngOnDestroy(): void {
+    this.taskSubscription.unsubscribe();
   }
 }
