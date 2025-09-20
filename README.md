@@ -43,9 +43,9 @@ The **Task Manager Angular App** is hosted and accessible online:
 
 ## Forms and Validation
 
-Task form use template driven form
-Comment and Reply Form use reactive Form 
-Validation rules:
+- Task form use template driven form
+- Comment and Reply Form use reactive Form 
+- Validation rules:
 Required fields
 Minimum/maximum length
 
